@@ -55,13 +55,14 @@ log_empty_line
 
 versioned_packages=""
 log "Verifying packages..."
-for package in ${packages}; do 
+for package in ${packages}; do
+  read package_name package_ver < <(get_package_name_ver "${package}")
+  package_query="$package_name"$(test -n "${package_ver}" && echo "=${package_ver}")
   if test ! "$(apt-cache show "${package}")"; then
     echo "aborted"
     log "Package '${package}' not found." >&2
     exit 5
-  fi
-  read package_name package_ver < <(get_package_name_ver "${package}")
+  fi  
   versioned_packages=""${versioned_packages}" "${package_name}"="${package_ver}""
 done
 log "done"
