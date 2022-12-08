@@ -58,7 +58,7 @@ log "Verifying packages..."
 for package in ${packages}; do
   read package_name package_ver < <(get_package_name_ver "${package}")
   package_query="$package_name"$(test -n "${package_ver}" && echo "=${package_ver}")
-  if test ! "$(apt-cache show "${package}")"; then
+  if test ! "$(apt-cache show "${package_query}")"; then
     echo "aborted"
     log "Package '${package}' not found." >&2
     exit 5
